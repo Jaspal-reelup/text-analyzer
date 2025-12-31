@@ -1,7 +1,10 @@
 langchain
+langchain-community
 langchain-openai
 langchain-text-splitters
 langgraph
 matplotlib
 networkx
+faiss-cpu
+pypdf
 python-dotenv

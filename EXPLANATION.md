@@ -32,12 +32,15 @@ This document explains the responsibility of each file and how they connect to f
 
 ### `src/document_ingestion/__init__.py`
 - `load_json_documents`: reads `knowledge_base.json` (list of `{ "text": ... }`).
+- `load_pdf_documents`: reads PDFs from a directory using `PyPDFLoader`.
 - `split_documents`: chunks documents into overlapping slices for retrieval.
 - This is the only place that touches raw source data.
 
 ### `src/vectorstore/__init__.py`
 - `build_vector_store`: creates embeddings and stores them in memory.
-- Uses OpenAI embeddings + `InMemoryVectorStore`.
+- `build_faiss_vector_store`: creates and saves a FAISS index on disk.
+- `load_faiss_vector_store`: loads a FAISS index for reuse.
+- Uses OpenAI embeddings + `InMemoryVectorStore` or `FAISS`.
 - This is the retrieval index for similarity search.
 
 ### `src/nodes/__init__.py`
@@ -63,6 +66,12 @@ main.py
   │    └─ uses node functions from src/nodes/__init__.py
   └─ invokes graph with State defined in src/state/__init__.py
 ```
+
+## Large PDF Mode
+
+- Enable with `python main.py --use-pdfs`.
+- PDFs are chunked and indexed into a persistent FAISS store.
+- On subsequent runs, the FAISS index is loaded to avoid recomputing embeddings.
 
 ## Design Notes
 

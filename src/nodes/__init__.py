@@ -1,6 +1,6 @@
 from typing import Callable
 
-from langchain_core.vectorstores import InMemoryVectorStore
+from langchain_core.vectorstores import VectorStore
 from langchain_core.language_models import BaseLanguageModel
 
 from src.state import State
@@ -12,7 +12,7 @@ def classify(state: State) -> dict:
 
 
 def make_retrieve_node(
-    vector_store: InMemoryVectorStore, k: int
+    vector_store: VectorStore, k: int
 ) -> Callable[[State], dict]:
     def retrieve(state: State) -> dict:
         retrieved_docs = vector_store.similarity_search(state["question"], k=k)
